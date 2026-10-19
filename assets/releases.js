@@ -115,11 +115,9 @@ window.DNP_RELEASES = (function () {
 
   // every tool's releases, newest first, each stamped with its tool; plus which tools could not be read
   let loading = null
-  // Two channels: a release whose tag is on main is stable; one only on dev is
-  // nightly. The build decides (scripts/build.mjs, GitHub's compare API) and
-  // records it in the snapshot as `channel`; a release the snapshot has not
-  // seen yet counts as nightly until the next build says otherwise.
-  // downloads.html?nightly shows every release; everywhere else, main's only.
+  // Two channels: releases from main are stable; releases from dev are marked
+  // pre-release by scripts/release.mjs and are the nightlies.
+  // downloads.html?nightly shows every release; everywhere else, stable only.
   const NIGHTLY = /[?&]nightly\b/.test(location.search)
   function load () {
     if (loading) return loading
@@ -133,11 +131,7 @@ window.DNP_RELEASES = (function () {
         let list = fresh && kept ? kept : null
         if (!list) { try { list = await fetchRepo(repoOf(t)) } catch (e) { list = kept || null } }
         if (!list) { failed.add(t.id); return }
-        const known = new Map((kept || []).map((x) => [x.tag_name, x.channel]))
-        for (const rel of list) {
-          const channel = rel.channel || known.get(rel.tag_name) || 'dev'
-          if (NIGHTLY || channel === 'main') out.push({ ...rel, channel, _tool: t.id })
-        }
+        for (const rel of list) if (NIGHTLY || !rel.prerelease) out.push({ ...rel, _tool: t.id })
       }))
       out.sort((x, y) => (y.published_at || '').localeCompare(x.published_at || ''))
       const why = failed.size === 0 ? 'From GitHub Releases'
@@ -148,7 +142,7 @@ window.DNP_RELEASES = (function () {
     return loading
   }
   const releasesOf = (releases, tool) => releases.filter((r) => r._tool === tool)
-  const latestOf = (releases, tool) => { const rs = releasesOf(releases, tool); return rs.find((r) => !r.prerelease) || rs[0] || null }
+  const latestOf = (releases, tool) => { const rs = releasesOf(releases, tool); return (NIGHTLY ? rs[0] : rs.find((r) => !r.prerelease)) || null }
   const filesOf = (release) => release.assets.map((a) => ({ a, ...parse(a) }))
   const MB = 1024 * 1024
   const size = (b) => b >= MB * 10 ? Math.round(b / MB) + ' MB' : b >= MB ? (b / MB).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB'

@@ -67,8 +67,7 @@ function releaseBlock (right, rel, heading) {
   const latest = R.latestOf(state.releases, rel._tool)
   const head = el('div', { className: 'rel-h' }, el(heading, { textContent: rel.name || rel.tag_name }))
   if (rel === latest) head.append(el('span', { className: 'badge', textContent: 'Latest' }))
-  if (rel.prerelease) head.append(el('span', { className: 'badge pre', textContent: 'Pre-release' }))
-  if (rel.channel === 'dev') head.append(el('span', { className: 'badge night', textContent: 'Nightly' }))
+  if (rel.prerelease) head.append(el('span', { className: 'badge night', textContent: 'Nightly' }))
   right.append(head, el('p', { className: 'meta', textContent: `${rel.tag_name} · released ${R.date(rel.published_at)}` }))
   const n = notes(rel.body); if (n) right.append(n)
   const f = fileTable(rel); right.append(f.node)
@@ -111,7 +110,7 @@ function show (key) {
       if (older.length) {
         right.append(el('h2', { className: 'group', textContent: 'Older versions' }))
         const ul = el('ul', { className: 'older' })
-        for (const o of older) ul.append(el('li', {}, el('a', { href: '#' + keyOf(o), textContent: o.name || o.tag_name }), ` · ${R.date(o.published_at)}${o.prerelease ? ' · pre-release' : ''}`))
+        for (const o of older) ul.append(el('li', {}, el('a', { href: '#' + keyOf(o), textContent: o.name || o.tag_name }), ` · ${R.date(o.published_at)}${o.prerelease ? ' · nightly' : ''}`))
         right.append(ul)
       }
     }
@@ -144,7 +143,7 @@ function buildTree () {
     const li = el('li', {}, node(t.id, t.icon, t.name))
     const vs = el('ul')
     const latest = R.latestOf(state.releases, t.id)
-    for (const r of R.releasesOf(state.releases, t.id)) vs.append(el('li', {}, node(keyOf(r), 'disk', R.versionOf(r), r === latest ? '(latest)' : r.prerelease ? '(pre-release)' : R.date(r.published_at))))
+    for (const r of R.releasesOf(state.releases, t.id)) vs.append(el('li', {}, node(keyOf(r), 'disk', R.versionOf(r), r === latest ? '(latest)' : r.prerelease ? '(nightly)' : R.date(r.published_at))))
     li.append(vs); tools.append(li)
   }
   root.append(tools); tree.append(root)

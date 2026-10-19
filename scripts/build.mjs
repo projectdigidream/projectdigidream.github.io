@@ -90,12 +90,7 @@ async function snapshotReleases (file) {
       const res = await fetch(`https://api.github.com/repos/${repo}/releases?per_page=30`, { headers })
       if (!res.ok) throw new Error('HTTP ' + res.status)
       repos[repo] = (await res.json()).filter((x) => !x.draft).map(slim)
-      // stable or nightly: is the tag's commit on main? (target_commitish says main for every release, so ask git)
-      for (const rel of repos[repo]) {
-        const cmp = await fetch(`https://api.github.com/repos/${repo}/compare/main...${encodeURIComponent(rel.tag_name)}`, { headers })
-        rel.channel = cmp.ok && ['identical', 'behind'].includes((await cmp.json()).status) ? 'main' : 'dev'
-      }
-      console.log(`  releases: ${repo}: ${repos[repo].length} (${repos[repo].filter((x) => x.channel === 'dev').length} nightly)`)
+      console.log(`  releases: ${repo}: ${repos[repo].length} (${repos[repo].filter((x) => x.prerelease).length} nightly)`)
     } catch (e) { console.warn(`  releases: ${repo}: not read (${e.message}); the pages will ask GitHub for it`) }
   }
   writeFileSync(file, JSON.stringify({ at: new Date().toISOString(), repos }) + '\n')
