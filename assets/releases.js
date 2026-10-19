@@ -115,6 +115,12 @@ window.DNP_RELEASES = (function () {
 
   // every tool's releases, newest first, each stamped with its tool; plus which tools could not be read
   let loading = null
+  // Two channels: a release whose tag is on main is stable; one only on dev is
+  // nightly. The build decides (scripts/build.mjs, GitHub's compare API) and
+  // records it in the snapshot as `channel`; a release the snapshot has not
+  // seen yet counts as nightly until the next build says otherwise.
+  // downloads.html?nightly shows every release; everywhere else, main's only.
+  const NIGHTLY = /[?&]nightly\b/.test(location.search)
   function load () {
     if (loading) return loading
     loading = (async () => {
@@ -127,7 +133,11 @@ window.DNP_RELEASES = (function () {
         let list = fresh && kept ? kept : null
         if (!list) { try { list = await fetchRepo(repoOf(t)) } catch (e) { list = kept || null } }
         if (!list) { failed.add(t.id); return }
-        for (const rel of list) out.push({ ...rel, _tool: t.id })
+        const known = new Map((kept || []).map((x) => [x.tag_name, x.channel]))
+        for (const rel of list) {
+          const channel = rel.channel || known.get(rel.tag_name) || 'dev'
+          if (NIGHTLY || channel === 'main') out.push({ ...rel, channel, _tool: t.id })
+        }
       }))
       out.sort((x, y) => (y.published_at || '').localeCompare(x.published_at || ''))
       const why = failed.size === 0 ? 'From GitHub Releases'
@@ -143,5 +153,5 @@ window.DNP_RELEASES = (function () {
   const MB = 1024 * 1024
   const size = (b) => b >= MB * 10 ? Math.round(b / MB) + ' MB' : b >= MB ? (b / MB).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB'
   const date = (iso) => new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
-  return { onePerSystem, kindOf, OWNER, TOOLS, ENGINE_REPO, PLATFORMS, repoOf, repoUrl, releasesUrl, latestUrl, toolOf, versionOf, platformOf, parse, detect, pickFor, load, releasesOf, latestOf, filesOf, size, date }
+  return { NIGHTLY, onePerSystem, kindOf, OWNER, TOOLS, ENGINE_REPO, PLATFORMS, repoOf, repoUrl, releasesUrl, latestUrl, toolOf, versionOf, platformOf, parse, detect, pickFor, load, releasesOf, latestOf, filesOf, size, date }
 })()

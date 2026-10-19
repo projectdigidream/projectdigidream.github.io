@@ -68,6 +68,7 @@ function releaseBlock (right, rel, heading) {
   const head = el('div', { className: 'rel-h' }, el(heading, { textContent: rel.name || rel.tag_name }))
   if (rel === latest) head.append(el('span', { className: 'badge', textContent: 'Latest' }))
   if (rel.prerelease) head.append(el('span', { className: 'badge pre', textContent: 'Pre-release' }))
+  if (rel.channel === 'dev') head.append(el('span', { className: 'badge night', textContent: 'Nightly' }))
   right.append(head, el('p', { className: 'meta', textContent: `${rel.tag_name} · released ${R.date(rel.published_at)}` }))
   const n = notes(rel.body); if (n) right.append(n)
   const f = fileTable(rel); right.append(f.node)
@@ -85,7 +86,7 @@ function select (key, addr, gh) {
   document.querySelectorAll('#tree .node').forEach((n) => n.setAttribute('aria-current', String(n.dataset.key === key)))
   document.getElementById('addr').textContent = addr
   const g = document.getElementById('gh'); g.hidden = !gh; if (gh) g.href = gh
-  try { history.replaceState(null, '', key ? '#' + key : location.pathname) } catch (e) {}
+  try { history.replaceState(null, '', location.pathname + location.search + (key ? '#' + key : '')) } catch (e) {}
 }
 
 function show (key) {
@@ -148,6 +149,17 @@ function buildTree () {
   }
   root.append(tools); tree.append(root)
 }
+
+// nightly mode: the night sky, the other channel's link, and what it means
+if (R.NIGHTLY) {
+  document.body.classList.add('nightly')
+  document.title = 'Digidream Nightly Builds'
+  document.querySelector('.tb .t').textContent = 'Exploring - Digidream Nightly Builds'
+  document.querySelector('#task .on').lastChild.textContent = 'Exploring - Digidream Nightly Builds'
+}
+const other = document.getElementById('channel')
+other.textContent = R.NIGHTLY ? 'Stable releases' : 'Nightly builds'
+other.href = R.NIGHTLY ? 'downloads.html' : 'downloads.html?nightly'
 
 ;(async function () {
   buildTree()

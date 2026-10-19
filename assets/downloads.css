@@ -91,3 +91,6 @@ table.files{width:100%;border-collapse:collapse;font-variant-numeric:tabular-num
 .notes code{font:13px/1.4 "Courier New",monospace;background:#fff;border:1px solid #c8c8a0;padding:0 3px;overflow-wrap:anywhere}
 .fg.rec{margin:2px 0 10px}
 .fg.rec span{display:inline-block;font:22px/1.2 var(--pix);color:#fff;background:#008000;padding:4px 14px 5px;border:2px solid;border-color:#5fd35f #004000 #004000 #5fd35f;text-shadow:1px 1px 0 #004000}
+/* nightly mode (downloads.html?nightly): the same hill by moonlight, and a nightly badge */
+body.nightly{background-image:url(shots/hills-night-bg.jpg)}
+.badge.night{background:#1a2450;color:#e8ecff;border-color:#000}
