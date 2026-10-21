@@ -16,6 +16,7 @@
     ...init, headers: { apikey: ANON_KEY, ...(ANON_KEY.startsWith('eyJ') ? { Authorization: 'Bearer ' + ANON_KEY } : {}), 'Content-Type': 'application/json', ...init.headers }
   })
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e }
+  const head = (who, date) => { const d = el('div', 'fb-head'); d.append(el('b', null, who), el('span', null, date)); return d }
   const when = (iso) => new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
 
   if (!SUPABASE_URL || !ANON_KEY) {
@@ -33,15 +34,15 @@
       if (!rows.length) list.append(el('p', 'fb-empty', 'No feedback yet. Be the first.'))
       for (const f of rows) {
         const item = el('div', 'fb-item')
-        item.append(el('div', 'fb-head', `${f.name || 'Anonymous'} · ${when(f.created_at)}`), el('p', 'fb-msg', f.message))
+        item.append(head(f.name || 'Anonymous', when(f.created_at)), el('p', 'fb-msg', f.message))
         if (f.reply) {
           const re = el('div', 'fb-reply')
-          re.append(el('div', 'fb-head', 'Reply from Digidream' + (f.replied_at ? ' · ' + when(f.replied_at) : '')), el('p', 'fb-msg', f.reply))
+          re.append(head('↳ Reply from the developer', f.replied_at ? when(f.replied_at) : ''), el('p', 'fb-msg', f.reply))
           item.append(re)
         }
         list.append(item)
       }
-      $('fb-count').textContent = rows.length + ' message(s)'
+      $('fb-count').textContent = rows.length + (rows.length === 1 ? ' message' : ' messages')
     } catch (e) { list.replaceChildren(el('p', 'fb-empty', 'Could not load the feedback just now.')) }
   }
 

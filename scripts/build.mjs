@@ -69,6 +69,15 @@ if (!index.includes(CARDS)) { console.error('index.html has lost the line the ca
 index = index.replace(CARDS, tools.map((t) => cardHtml(t, OWNER)).join('\n')).replace('<!-- tools-count -->', String(tools.length))
 writeFileSync(join(OUT, 'index.html'), index)
 
+// Every page's own scripts and styles get ?v=<this build>, so a browser that
+// cached the last deploy's files (Pages lets it keep them 10 minutes) fetches
+// the new ones with the new page instead of mixing the two.
+const STAMP = Date.now().toString(36)
+for (const page of ['index.html', 'downloads.html']) {
+  const f = join(OUT, page)
+  writeFileSync(f, readFileSync(f, 'utf8').replace(/((?:src|href)="(?:assets|tutorials\/assets)\/[^"?]+\.(?:js|css))"/g, `$1?v=${STAMP}"`))
+}
+
 if (!process.argv.includes('--no-releases')) await snapshotReleases(join(OUT, 'assets', 'releases.json'))
 
 async function snapshotReleases (file) {

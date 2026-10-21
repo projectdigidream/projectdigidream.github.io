@@ -111,21 +111,26 @@
 
   <section class="win out fb" data-icon="doc" data-task="Feedback" id="w-feedback">
     <div class="tb"><span class="t">Feedback - Guestbook</span></div>
-    <div class="wb">
-      <h2>Tell me what you think</h2>
-      <p class="sub">No account needed. Messages and my replies are public.</p>
+    <div class="menu"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
+    <div class="wb fbpanes">
       <form id="fb-form" class="fbform">
-        <label for="fb-name">Name <small>(optional)</small></label>
-        <input class="in" id="fb-name" name="fbname" maxlength="40" autocomplete="nickname" placeholder="Anonymous">
-        <label for="fb-message">Message</label>
-        <textarea class="in" id="fb-message" name="message" rows="4" maxlength="2000" required></textarea>
-        <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="fb-hp">
-        <div class="ctas"><button class="b95 def" type="submit">Send</button><span id="fb-status" role="status"></span></div>
+        <fieldset>
+          <legend>New message</legend>
+          <p class="fbnote">No account needed. Messages and my replies are public.</p>
+          <label for="fb-name">Name <small>(optional)</small></label>
+          <input class="in" id="fb-name" name="fbname" maxlength="40" autocomplete="nickname" placeholder="Anonymous">
+          <label for="fb-message">Message</label>
+          <textarea class="in" id="fb-message" name="message" rows="7" maxlength="2000" required placeholder="What works, what does not, what you would like…"></textarea>
+          <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="fb-hp">
+          <div class="fbsend"><button class="b95 def" type="submit">Send</button><span id="fb-status" role="status"></span></div>
+        </fieldset>
       </form>
-      <h3 class="fb-title">What others said</h3>
-      <div class="fb-list in" id="fb-list"><p class="fb-empty">Loading…</p></div>
+      <div class="fbinbox">
+        <div class="fbcols" aria-hidden="true"><span>Messages</span><span id="fb-count">…</span></div>
+        <div class="fb-list in" id="fb-list"><p class="fb-empty">Loading…</p></div>
+      </div>
     </div>
-    <div class="status"><div class="in" id="fb-count">…</div><div class="in">Stored with Supabase</div></div>
+    <div class="status"><div class="in">Replies come from the developer</div><div class="in">Stored with Supabase</div></div>
   </section>
 
   <section class="win out" data-icon="folder" data-task="Tools" id="w-tools">
