@@ -4,15 +4,16 @@
 // The anon key is meant to be public: what it may do is limited by the
 // table's row-level security, not by keeping it secret.
 ;(function () {
-  const SUPABASE_URL = '' // e.g. 'https://abcdefgh.supabase.co'
-  const ANON_KEY = ''
+  const SUPABASE_URL = 'https://altxbeghzjvelokaehvy.supabase.co'
+  const ANON_KEY = 'sb_publishable_7xgBz80x_oIcZAvEznI90g_ssoW-v4Z'
   const $ = (id) => document.getElementById(id)
   const form = $('fb-form')
   if (!form) return
   const status = $('fb-status')
   const list = $('fb-list')
   const api = (q, init = {}) => fetch(SUPABASE_URL + '/rest/v1/feedback' + q, {
-    ...init, headers: { apikey: ANON_KEY, Authorization: 'Bearer ' + ANON_KEY, 'Content-Type': 'application/json', ...init.headers }
+    // a publishable key (sb_publishable_...) goes in apikey alone; an old anon JWT also as the bearer
+    ...init, headers: { apikey: ANON_KEY, ...(ANON_KEY.startsWith('eyJ') ? { Authorization: 'Bearer ' + ANON_KEY } : {}), 'Content-Type': 'application/json', ...init.headers }
   })
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e }
   const when = (iso) => new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
