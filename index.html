@@ -38,7 +38,7 @@
         <div class="tb"><span class="t" id="state-t">Current state of the project</span></div>
         <div class="wb">
           <p>The project is technically functional and has all the basic functionality. However, it stays in a very preliminary state, and still has a long way to go before reaching any kind of maturity. Thus, any kind of feedback is more than welcome!</p>
-          <div class="ctas"><a class="b95 def" href="https://github.com/projectdigidream/digidream-studio/issues/new" target="_blank" rel="noopener">Give feedback</a><a class="b95" href="https://github.com/projectdigidream/digidream-studio/issues" target="_blank" rel="noopener">See what others said</a></div>
+          <div class="ctas"><a class="b95 def" href="#w-feedback">Give feedback</a><a class="b95" href="https://github.com/projectdigidream/digidream-studio/issues" target="_blank" rel="noopener">Report a bug on GitHub</a></div>
         </div>
       </section>
     </div>
@@ -107,6 +107,25 @@
         <li><b>One monster</b>Draw its brain as states: look, chase, attack, pain.</li>
       </ol>
     </div>
+  </section>
+
+  <section class="win out fb" data-icon="doc" data-task="Feedback" id="w-feedback">
+    <div class="tb"><span class="t">Feedback - Guestbook</span></div>
+    <div class="wb">
+      <h2>Tell me what you think</h2>
+      <p class="sub">No account needed. Messages and my replies are public.</p>
+      <form id="fb-form" class="fbform">
+        <label for="fb-name">Name <small>(optional)</small></label>
+        <input class="in" id="fb-name" name="fbname" maxlength="40" autocomplete="nickname" placeholder="Anonymous">
+        <label for="fb-message">Message</label>
+        <textarea class="in" id="fb-message" name="message" rows="4" maxlength="2000" required></textarea>
+        <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="fb-hp">
+        <div class="ctas"><button class="b95 def" type="submit">Send</button><span id="fb-status" role="status"></span></div>
+      </form>
+      <h3 class="fb-title">What others said</h3>
+      <div class="fb-list in" id="fb-list"><p class="fb-empty">Loading…</p></div>
+    </div>
+    <div class="status"><div class="in" id="fb-count">…</div><div class="in">Stored with Supabase</div></div>
   </section>
 
   <section class="win out" data-icon="folder" data-task="Tools" id="w-tools">
@@ -188,5 +207,6 @@
 <script src="tutorials/assets/nav.js"></script>
 <script src="assets/index.js"></script>
 <script src="assets/zoom.js"></script>
+<script src="assets/feedback.js"></script>
 </body>
 </html>

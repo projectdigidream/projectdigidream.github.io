@@ -197,3 +197,21 @@ legend{padding:0 4px;font-weight:bold}
 .books small{color:#555;margin-left:auto;white-space:nowrap}
 .books p{margin:0 0 6px 36px;font-size:13px;color:#333}
 @media (max-width:860px){.books{grid-template-columns:minmax(0,1fr)}}
+
+/* feedback */
+.fbform{display:grid;gap:4px;max-width:640px;margin-bottom:16px}
+.fbform label{font-weight:bold;margin-top:6px}
+.fbform label small{font-weight:normal;color:#444}
+.fbform input,.fbform textarea{font:inherit;padding:4px 6px;background:var(--paper);color:var(--ink);min-width:0;width:100%;box-sizing:border-box}
+.fbform textarea{resize:vertical}
+.fbform .ctas{align-items:center;margin-top:8px}
+.fb-hp{position:absolute;left:-9999px;width:1px;height:1px}
+.fb-title{font:18px var(--pix);margin:0 0 6px}
+.fb-list{background:var(--paper);padding:8px 12px;max-height:420px;overflow:auto}
+.fb-item{padding:8px 0;border-bottom:1px dotted #bbb}
+.fb-item:last-child{border-bottom:0}
+.fb-head{font-size:13px;color:#555}
+.fb-msg{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.fb-reply{margin:8px 0 0 18px;padding:6px 10px;background:var(--tip);border:1px solid var(--dk)}
+.fb-reply .fb-head{color:var(--title-a);font-weight:bold}
+.fb-empty{margin:4px 0;color:#555}
