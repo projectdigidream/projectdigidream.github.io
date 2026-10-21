@@ -56,7 +56,13 @@ function fileTable (rel) {
   const split = groups.size > 1
   for (const [v, rows] of groups) {
     if (!rows.length) continue
-    if (split) node.append(v ? el('h3', { className: 'fg' + (/not recommended/i.test(v.group) ? ' lesser' : ''), textContent: v.group }) : el('h3', { className: 'fg rec' }, el('span', { textContent: '★ Recommended' })))
+    // a not-recommended group waits behind a button (a native <details>)
+    if (v && /not recommended/i.test(v.group)) {
+      const box = el('details', { className: 'fghide' }, el('summary', { className: 'b95', textContent: 'Show the builds ' + v.group.toLowerCase() }))
+      if (v.note) box.append(el('p', { className: 'fgnote', textContent: v.note }))
+      box.append(table(rows)); node.append(box); continue
+    }
+    if (split) node.append(v ? el('h3', { className: 'fg', textContent: v.group }) : el('h3', { className: 'fg rec' }, el('span', { textContent: '★ Recommended' })))
     if (split && v && v.note) node.append(el('p', { className: 'fgnote', textContent: v.note }))
     node.append(table(rows))
   }

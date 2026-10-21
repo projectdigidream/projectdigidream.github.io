@@ -94,3 +94,8 @@ table.files{width:100%;border-collapse:collapse;font-variant-numeric:tabular-num
 /* nightly mode (downloads.html?nightly): the same hill by moonlight, and a nightly badge */
 body.nightly{background-image:url(shots/hills-night-bg.jpg)}
 .badge.night{background:#1a2450;color:#e8ecff;border-color:#000}
+/* the not-recommended builds, folded away behind a button */
+.fghide{margin:14px 0 0}
+.fghide > summary{list-style:none;cursor:pointer;font-size:14px;color:#333}
+.fghide > summary::-webkit-details-marker{display:none}
+.fghide[open] > summary{border-color:var(--dk) var(--hi) var(--hi) var(--dk);margin-bottom:8px}
