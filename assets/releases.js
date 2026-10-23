@@ -27,7 +27,8 @@ window.DNP_RELEASES = (function () {
     'macos-x64': { label: 'macOS', detail: 'Intel' },
     'macos': { label: 'macOS', detail: 'universal' },
     'linux-x64': { label: 'Linux', detail: '64-bit' },
-    android: { label: 'Android', detail: 'APK, sideload' }
+    android: { label: 'Android', detail: 'APK, sideload' },
+    ios: { label: 'iPhone and iPad', detail: 'not built yet' }
   }
   const repoOf = (tool) => OWNER + '/' + tool.repo
   const repoUrl = (tool) => 'https://github.com/' + repoOf(tool)
@@ -64,6 +65,8 @@ window.DNP_RELEASES = (function () {
     const ua = navigator.userAgent
     if (/Android/i.test(ua)) return 'android'
     if (/Windows/i.test(ua)) return 'windows-x64'
+    // before the Mac: an iPhone says "like Mac OS X", and an iPad asks for the desktop site as a Mac with a touch screen
+    if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) return 'ios'
     if (/Mac OS X|Macintosh/i.test(ua)) return 'macos-arm64' // a browser cannot tell Apple silicon from Intel reliably; most new Macs are arm64
     if (/Linux/i.test(ua)) return 'linux-x64'
     return 'windows-x64'
